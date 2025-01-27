@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Transfer Portal</title>
+  <title>Advanced FinTech Transfer Portal</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
     body {
@@ -18,7 +18,7 @@
       background: white;
       border-radius: 12px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      max-width: 500px;
+      max-width: 600px;
       padding: 20px;
       width: 100%;
     }
@@ -34,55 +34,105 @@
     .btn-primary:hover {
       background-color: #45a049;
     }
+    .menu {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+    .menu-item {
+      color: #4caf50;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    .menu-item:hover {
+      color: #45a049;
+    }
   </style>
 </head>
 <body>
   <div class="card">
-    <h1 class="text-3xl font-bold text-center text-gray-800 mb-4">Money Transfer Service</h1>
-    <form id="transferForm" class="space-y-6">
-      <div>
-        <label for="transferType" class="block text-sm font-medium text-gray-700">Transfer Type</label>
-        <select id="transferType" name="transferType" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-          <option value="paypal">PayPal to PayPal</option>
-          <option value="visa">Visa to Visa</option>
-        </select>
-      </div>
+    <div class="menu">
+      <span class="menu-item" onclick="showSection('transfer')">Transfer</span>
+      <span class="menu-item" onclick="showSection('history')">History</span>
+      <span class="menu-item" onclick="showSection('settings')">Settings</span>
+    </div>
 
-      <div>
-        <label for="senderDetails" class="block text-sm font-medium text-gray-700">Sender Details</label>
-        <input type="text" id="senderDetails" name="senderDetails" placeholder="Email or Card Number" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required />
-      </div>
+    <div id="transfer-section">
+      <h1 class="text-3xl font-bold text-center text-gray-800 mb-4">Money Transfer Service</h1>
+      <form id="transferForm" class="space-y-6">
+        <div>
+          <label for="transferType" class="block text-sm font-medium text-gray-700">Transfer Type</label>
+          <select id="transferType" name="transferType" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            <option value="paypal">PayPal to PayPal</option>
+            <option value="visa">Visa to Visa</option>
+          </select>
+        </div>
 
-      <div>
-        <label for="recipientDetails" class="block text-sm font-medium text-gray-700">Recipient Details</label>
-        <input type="text" id="recipientDetails" name="recipientDetails" placeholder="Email or Card Number" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required />
-      </div>
+        <div>
+          <label for="senderDetails" class="block text-sm font-medium text-gray-700">Sender Details</label>
+          <input type="text" id="senderDetails" name="senderDetails" placeholder="Email or Card Number" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required />
+        </div>
 
-      <div>
-        <label for="amount" class="block text-sm font-medium text-gray-700">Amount (USD)</label>
-        <input type="number" id="amount" name="amount" min="1" step="0.01" placeholder="Enter Amount" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required />
-      </div>
+        <div>
+          <label for="recipientDetails" class="block text-sm font-medium text-gray-700">Recipient Details</label>
+          <input type="text" id="recipientDetails" name="recipientDetails" placeholder="Email or Card Number" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required />
+        </div>
 
-      <div class="flex justify-center">
-        <button type="submit" class="btn-primary">Transfer Now</button>
-      </div>
-    </form>
+        <div>
+          <label for="amount" class="block text-sm font-medium text-gray-700">Amount (USD)</label>
+          <input type="number" id="amount" name="amount" min="1" step="0.01" placeholder="Enter Amount" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required />
+        </div>
+
+        <div class="flex justify-center">
+          <button type="submit" class="btn-primary">Transfer Now</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="history-section" style="display: none;">
+      <h2 class="text-2xl font-bold text-center text-gray-800 mb-4">Transfer History</h2>
+      <p class="text-center text-gray-600">Your transaction history will appear here.</p>
+    </div>
+
+    <div id="settings-section" style="display: none;">
+      <h2 class="text-2xl font-bold text-center text-gray-800 mb-4">Settings</h2>
+      <p class="text-center text-gray-600">Adjust your account preferences here.</p>
+    </div>
   </div>
 
   <script>
+    function showSection(section) {
+      document.getElementById('transfer-section').style.display = section === 'transfer' ? 'block' : 'none';
+      document.getElementById('history-section').style.display = section === 'history' ? 'block' : 'none';
+      document.getElementById('settings-section').style.display = section === 'settings' ? 'block' : 'none';
+    }
+
     async function handleTransfer(data) {
       try {
-        const response = await fetch('/api/transfer', {
+        let apiUrl;
+        if (data.transferType === 'paypal') {
+          apiUrl = 'https://api-m.sandbox.paypal.com/v1/payments/payment';
+        } else if (data.transferType === 'visa') {
+          apiUrl = 'https://sandbox.api.visa.com/vdp/visaAlias/v1/transfer';
+        }
+
+        const response = await fetch(apiUrl, {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer YOUR_API_TOKEN' // Replace with valid token
           },
-          body: JSON.stringify(data)
+          body: JSON.stringify({
+            sender: data.senderDetails,
+            recipient: data.recipientDetails,
+            amount: data.amount,
+          })
         });
 
         if (response.ok) {
           const result = await response.json();
-          alert(`Transfer Successful: Transaction ID - ${result.transactionId}`);
+          alert(`Transfer Successful: Transaction ID - ${result.id || result.transactionId}`);
         } else {
           const error = await response.json();
           alert(`Error: ${error.message}`);
