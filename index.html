@@ -183,24 +183,24 @@
 -->
 
 
-
+<!--
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Meta Configuration -->
+  <!-- Meta Configuration --
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Page Title -->
+  <!-- Page Title --
   <title>DPHSIAHK FinTech Wallet Portal</title>
 
-  <!-- TailwindCSS for Quick Styling -->
+  <!-- TailwindCSS for Quick Styling --
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
-  <!-- Supabase Client Library -->
+  <!-- Supabase Client Library --
   <script src="https://unpkg.com/@supabase/supabase-js"></script>
 
-  <!-- Custom Styles -->
+  <!-- Custom Styles --
   <style>
     /* Page Background */
     body {
@@ -268,24 +268,24 @@
 </head>
 
 <body>
-  <!-- Main Card Container -->
+  <!-- Main Card Container --
   <div class="card">
 
-    <!-- Top Navigation Menu -->
+    <!-- Top Navigation Menu --
     <div class="menu">
       <span class="menu-item" onclick="showSection('transfer')">Transfer</span>
       <span class="menu-item" onclick="showSection('history')">History</span>
       <span class="menu-item" onclick="showSection('settings')">Settings</span>
     </div>
 
-    <!-- Money Transfer Section -->
+    <!-- Money Transfer Section --
     <div id="transfer" class="section active">
       <h2 class="text-2xl font-bold text-center text-gray-800 mb-4">Money Transfer</h2>
 
-      <!-- Transfer Form -->
-      <form id="transferForm" class="space-y-6">
+      <!-- Transfer Form --
+      <form id="transferForm" class="space-y-6"
         
-        <!-- Transfer Type Dropdown -->
+        <!-- Transfer Type Dropdown --
         <div>
           <label for="transferType" class="block text-sm font-medium text-gray-700">Transfer Type</label>
           <select id="transferType" name="transferType" class="input-field" required>
@@ -295,50 +295,50 @@
           </select>
         </div>
 
-        <!-- Sender Email/Card -->
+        <!-- Sender Email/Card --
         <div>
           <label for="senderDetails" class="block text-sm font-medium text-gray-700">Sender (Email/Card)</label>
           <input type="text" id="senderDetails" name="senderDetails" class="input-field" required />
         </div>
 
-        <!-- Recipient Email/Card -->
+        <!-- Recipient Email/Card --
         <div>
           <label for="recipientDetails" class="block text-sm font-medium text-gray-700">Recipient (Email/Card)</label>
           <input type="text" id="recipientDetails" name="recipientDetails" class="input-field" required />
         </div>
 
-        <!-- Transfer Amount -->
+        <!-- Transfer Amount --
         <div>
           <label for="amount" class="block text-sm font-medium text-gray-700">Amount (USD)</label>
           <input type="number" id="amount" name="amount" min="1" step="0.01" class="input-field" required />
         </div>
 
-        <!-- Submit Button -->
+        <!-- Submit Button --
         <div class="flex justify-center">
           <button type="submit" class="btn-primary">Transfer Now</button>
         </div>
       </form>
     </div>
 
-    <!-- Transaction History Section -->
-    <div id="history" class="section">
+    <!-- Transaction History Section --
+    <div id="history" class="section"
       <h2 class="text-2xl font-bold text-center text-gray-800 mb-4">Transfer History</h2>
 
-      <!-- History List Placeholder -->
-      <div id="historyList" class="space-y-4">
+      <!-- History List Placeholder --
+      <div id="historyList" class="space-y-4"
         <p class="text-center text-gray-600">Loading your transaction history...</p>
       </div>
     </div>
 
-    <!-- Settings Section -->
-    <div id="settings" class="section">
+    <!-- Settings Section --
+    <div id="settings" class="section"
       <h2 class="text-2xl font-bold text-center text-gray-800 mb-4">Settings</h2>
       <p class="text-center text-gray-600">Coming Soon: Customize your account settings.</p>
     </div>
 
   </div>
 
-  <!-- Javascript Section -->
+  <!-- Javascript Section --
   <script>
     // Initialize Supabase Client
     const SUPABASE_URL = 'https://your-project.supabase.co'; // TODO: Replace with your real Supabase URL
@@ -439,7 +439,7 @@
     }
   </script>
 
-  <!-- Minor Form Style -->
+  <!-- Minor Form Style --
   <style>
     .input-field {
       margin-top: 0.5rem;
@@ -456,6 +456,282 @@
       box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.3);
     }
   </style>
+
+</body>
+</html>
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FinTech Wallet App</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Supabase -->
+  <script src="https://unpkg.com/@supabase/supabase-js"></script>
+
+  <style>
+    body {
+      background: linear-gradient(135deg, #00c6ff, #0072ff);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      font-family: 'Poppins', sans-serif;
+    }
+    .card {
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 450px;
+      padding: 30px;
+    }
+    .input {
+      margin-top: 8px;
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    .button {
+      margin-top: 16px;
+      width: 100%;
+      padding: 12px;
+      background-color: #0072ff;
+      color: white;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .button:hover {
+      background-color: #005ac1;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Main Wallet Card -->
+  <div class="card">
+
+    <!-- Notification Message -->
+    <div id="notification" class="text-center mb-4 text-sm font-semibold text-green-600 hidden"></div>
+
+    <!-- Authentication Section -->
+    <div id="authSection">
+
+      <!-- Sign In -->
+      <h2 class="text-2xl font-bold text-center">Login</h2>
+      <input id="loginEmail" type="email" placeholder="Email" class="input">
+      <input id="loginPassword" type="password" placeholder="Password" class="input">
+      <button class="button" onclick="login()">Login</button>
+
+      <p class="text-center text-gray-500 mt-4">Or</p>
+
+      <!-- Sign Up -->
+      <h2 class="text-2xl font-bold text-center mt-4">Register</h2>
+      <input id="signupEmail" type="email" placeholder="Email" class="input">
+      <input id="signupPassword" type="password" placeholder="Password" class="input">
+      <button class="button" onclick="signup()">Register</button>
+
+    </div>
+
+    <!-- Wallet Section (After Login) -->
+    <div id="walletSection" class="hidden">
+
+      <h2 class="text-2xl font-bold text-center">Your Wallet</h2>
+
+      <!-- Show Balance -->
+      <p id="walletBalance" class="text-center text-2xl font-semibold my-4">$0.00</p>
+
+      <!-- Actions -->
+      <button class="button" onclick="showDeposit()">Deposit</button>
+      <button class="button" onclick="showWithdraw()">Withdraw</button>
+      <button class="button" onclick="showTransfer()">Transfer</button>
+      <button class="button bg-red-500 hover:bg-red-700" onclick="logout()">Logout</button>
+
+      <!-- Deposit Section -->
+      <div id="depositSection" class="hidden mt-4">
+        <input id="depositAmount" type="number" placeholder="Deposit Amount" class="input">
+        <button class="button" onclick="deposit()">Confirm Deposit</button>
+      </div>
+
+      <!-- Withdraw Section -->
+      <div id="withdrawSection" class="hidden mt-4">
+        <input id="withdrawAmount" type="number" placeholder="Withdraw Amount" class="input">
+        <button class="button" onclick="withdraw()">Confirm Withdrawal</button>
+      </div>
+
+      <!-- Transfer Section -->
+      <div id="transferSection" class="hidden mt-4">
+        <input id="transferEmail" type="email" placeholder="Recipient Email" class="input">
+        <input id="transferAmount" type="number" placeholder="Amount to Transfer" class="input">
+        <button class="button" onclick="transfer()">Send Transfer</button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    // Initialize Supabase
+    const SUPABASE_URL = 'https://your-project.supabase.co'; // <-- Change to your Supabase URL
+    const SUPABASE_KEY = 'your-anon-key'; // <-- Change to your Supabase Key
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let currentUser = null;
+
+    // Show Notification
+    function notify(message, isError = false) {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.classList.remove('hidden');
+      notification.classList.toggle('text-red-600', isError);
+      notification.classList.toggle('text-green-600', !isError);
+
+      setTimeout(() => {
+        notification.classList.add('hidden');
+      }, 4000);
+    }
+
+    // Sign Up
+    async function signup() {
+      const email = document.getElementById('signupEmail').value;
+      const password = document.getElementById('signupPassword').value;
+      const { user, error } = await supabase.auth.signUp({ email, password });
+
+      if (error) {
+        notify(error.message, true);
+      } else {
+        notify('Registration Successful! Please check your email.');
+        createWallet(user.id);
+      }
+    }
+
+    // Create Wallet on Signup
+    async function createWallet(userId) {
+      await supabase.from('wallets').insert([{ user_id: userId, balance: 0 }]);
+    }
+
+    // Login
+    async function login() {
+      const email = document.getElementById('loginEmail').value;
+      const password = document.getElementById('loginPassword').value;
+      const { user, error } = await supabase.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        notify(error.message, true);
+      } else {
+        currentUser = user.user;
+        document.getElementById('authSection').classList.add('hidden');
+        document.getElementById('walletSection').classList.remove('hidden');
+        fetchBalance();
+      }
+    }
+
+    // Logout
+    async function logout() {
+      await supabase.auth.signOut();
+      location.reload();
+    }
+
+    // Fetch Wallet Balance
+    async function fetchBalance() {
+      const { data, error } = await supabase
+        .from('wallets')
+        .select('balance')
+        .eq('user_id', currentUser.id)
+        .single();
+
+      if (!error) {
+        document.getElementById('walletBalance').textContent = `$${data.balance.toFixed(2)}`;
+      }
+    }
+
+    // Deposit
+    async function deposit() {
+      const amount = parseFloat(document.getElementById('depositAmount').value);
+      if (isNaN(amount) || amount <= 0) {
+        notify('Invalid deposit amount.', true);
+        return;
+      }
+      await supabase.rpc('deposit_funds', { user_id_input: currentUser.id, amount_input: amount });
+      notify('Deposit Successful!');
+      fetchBalance();
+    }
+
+    // Withdraw
+    async function withdraw() {
+      const amount = parseFloat(document.getElementById('withdrawAmount').value);
+      if (isNaN(amount) || amount <= 0) {
+        notify('Invalid withdrawal amount.', true);
+        return;
+      }
+      const { error } = await supabase.rpc('withdraw_funds', { user_id_input: currentUser.id, amount_input: amount });
+      if (error) {
+        notify('Insufficient Funds.', true);
+      } else {
+        notify('Withdrawal Successful!');
+        fetchBalance();
+      }
+    }
+
+    // Transfer
+    async function transfer() {
+      const email = document.getElementById('transferEmail').value;
+      const amount = parseFloat(document.getElementById('transferAmount').value);
+      if (!email || isNaN(amount) || amount <= 0) {
+        notify('Invalid transfer details.', true);
+        return;
+      }
+      const { data: recipient } = await supabase
+        .from('users')
+        .select('id')
+        .eq('email', email)
+        .single();
+
+      if (!recipient) {
+        notify('Recipient not found.', true);
+        return;
+      }
+
+      await supabase.rpc('transfer_funds', {
+        sender_id: currentUser.id,
+        recipient_id: recipient.id,
+        amount_input: amount
+      });
+
+      notify('Transfer Successful!');
+      fetchBalance();
+    }
+
+    // Show Specific Sections
+    function showDeposit() {
+      document.getElementById('depositSection').classList.remove('hidden');
+      document.getElementById('withdrawSection').classList.add('hidden');
+      document.getElementById('transferSection').classList.add('hidden');
+    }
+    function showWithdraw() {
+      document.getElementById('depositSection').classList.add('hidden');
+      document.getElementById('withdrawSection').classList.remove('hidden');
+      document.getElementById('transferSection').classList.add('hidden');
+    }
+    function showTransfer() {
+      document.getElementById('depositSection').classList.add('hidden');
+      document.getElementById('withdrawSection').classList.add('hidden');
+      document.getElementById('transferSection').classList.remove('hidden');
+    }
+  </script>
 
 </body>
 </html>
