@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -178,5 +178,284 @@
       handleTransfer(requestData);
     });
   </script>
+</body>
+</html>
+-->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta Configuration -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Page Title -->
+  <title>DPHSIAHK FinTech Wallet Portal</title>
+
+  <!-- TailwindCSS for Quick Styling -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+  <!-- Supabase Client Library -->
+  <script src="https://unpkg.com/@supabase/supabase-js"></script>
+
+  <!-- Custom Styles -->
+  <style>
+    /* Page Background */
+    body {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Poppins', sans-serif;
+      padding: 20px;
+    }
+
+    /* Card Styling */
+    .card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      max-width: 700px;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    /* Top Menu Navigation */
+    .menu {
+      display: flex;
+      justify-content: space-around;
+      background-color: #4caf50;
+      padding: 10px;
+    }
+
+    /* Each Menu Item */
+    .menu-item {
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: opacity 0.3s;
+    }
+    .menu-item:hover {
+      opacity: 0.8;
+    }
+
+    /* Section Content Styling */
+    .section {
+      display: none;
+      padding: 20px;
+    }
+    .section.active {
+      display: block;
+    }
+
+    /* Primary Button Styling */
+    .btn-primary {
+      background-color: #4caf50;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .btn-primary:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Main Card Container -->
+  <div class="card">
+
+    <!-- Top Navigation Menu -->
+    <div class="menu">
+      <span class="menu-item" onclick="showSection('transfer')">Transfer</span>
+      <span class="menu-item" onclick="showSection('history')">History</span>
+      <span class="menu-item" onclick="showSection('settings')">Settings</span>
+    </div>
+
+    <!-- Money Transfer Section -->
+    <div id="transfer" class="section active">
+      <h2 class="text-2xl font-bold text-center text-gray-800 mb-4">Money Transfer</h2>
+
+      <!-- Transfer Form -->
+      <form id="transferForm" class="space-y-6">
+        
+        <!-- Transfer Type Dropdown -->
+        <div>
+          <label for="transferType" class="block text-sm font-medium text-gray-700">Transfer Type</label>
+          <select id="transferType" name="transferType" class="input-field" required>
+            <option value="">Select Type</option>
+            <option value="paypal">PayPal to PayPal</option>
+            <option value="visa">Visa to Visa</option>
+          </select>
+        </div>
+
+        <!-- Sender Email/Card -->
+        <div>
+          <label for="senderDetails" class="block text-sm font-medium text-gray-700">Sender (Email/Card)</label>
+          <input type="text" id="senderDetails" name="senderDetails" class="input-field" required />
+        </div>
+
+        <!-- Recipient Email/Card -->
+        <div>
+          <label for="recipientDetails" class="block text-sm font-medium text-gray-700">Recipient (Email/Card)</label>
+          <input type="text" id="recipientDetails" name="recipientDetails" class="input-field" required />
+        </div>
+
+        <!-- Transfer Amount -->
+        <div>
+          <label for="amount" class="block text-sm font-medium text-gray-700">Amount (USD)</label>
+          <input type="number" id="amount" name="amount" min="1" step="0.01" class="input-field" required />
+        </div>
+
+        <!-- Submit Button -->
+        <div class="flex justify-center">
+          <button type="submit" class="btn-primary">Transfer Now</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Transaction History Section -->
+    <div id="history" class="section">
+      <h2 class="text-2xl font-bold text-center text-gray-800 mb-4">Transfer History</h2>
+
+      <!-- History List Placeholder -->
+      <div id="historyList" class="space-y-4">
+        <p class="text-center text-gray-600">Loading your transaction history...</p>
+      </div>
+    </div>
+
+    <!-- Settings Section -->
+    <div id="settings" class="section">
+      <h2 class="text-2xl font-bold text-center text-gray-800 mb-4">Settings</h2>
+      <p class="text-center text-gray-600">Coming Soon: Customize your account settings.</p>
+    </div>
+
+  </div>
+
+  <!-- Javascript Section -->
+  <script>
+    // Initialize Supabase Client
+    const SUPABASE_URL = 'https://your-project.supabase.co'; // TODO: Replace with your real Supabase URL
+    const SUPABASE_KEY = 'your-anon-key'; // TODO: Replace with your real Supabase anon key
+    const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // Function to Switch Sections (Transfer / History / Settings)
+    function showSection(sectionId) {
+      document.querySelectorAll('.section').forEach(section => {
+        section.classList.remove('active');
+      });
+      document.getElementById(sectionId).classList.add('active');
+
+      // If user clicks History, load transactions
+      if (sectionId === 'history') {
+        loadHistory();
+      }
+    }
+
+    // Handle Transfer Form Submission
+    document.getElementById('transferForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      // Collect Form Values
+      const transferType = document.getElementById('transferType').value;
+      const senderDetails = document.getElementById('senderDetails').value.trim();
+      const recipientDetails = document.getElementById('recipientDetails').value.trim();
+      const amount = parseFloat(document.getElementById('amount').value);
+
+      // Simple Validation
+      if (!transferType || !senderDetails || !recipientDetails || isNaN(amount) || amount <= 0) {
+        alert('Please fill all fields correctly.');
+        return;
+      }
+
+      // Insert New Transfer into Supabase
+      const { data, error } = await supabase
+        .from('transfers')
+        .insert([
+          {
+            transfer_type: transferType,
+            sender_details: senderDetails,
+            recipient_details: recipientDetails,
+            amount: amount,
+            transaction_status: 'pending' // Default transaction status
+          }
+        ]);
+
+      // Handle Success or Error
+      if (error) {
+        console.error('Transfer Failed:', error);
+        alert('Transfer failed. Please try again.');
+      } else {
+        alert('Transfer successfully initiated!');
+        document.getElementById('transferForm').reset(); // Clear the form
+      }
+    });
+
+    // Function to Load Transaction History
+    async function loadHistory() {
+      const historyList = document.getElementById('historyList');
+      historyList.innerHTML = '<p class="text-center text-gray-600">Loading...</p>';
+
+      // Fetch Transfer Records from Supabase
+      const { data, error } = await supabase
+        .from('transfers')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      // Handle Errors
+      if (error) {
+        historyList.innerHTML = '<p class="text-center text-red-600">Error loading history.</p>';
+        console.error('Load History Error:', error);
+        return;
+      }
+
+      // If No History Found
+      if (data.length === 0) {
+        historyList.innerHTML = '<p class="text-center text-gray-600">No transactions found.</p>';
+        return;
+      }
+
+      // Render History
+      historyList.innerHTML = '';
+      data.forEach(tx => {
+        const txDiv = document.createElement('div');
+        txDiv.className = 'border p-4 rounded shadow-sm bg-gray-50';
+        txDiv.innerHTML = `
+          <p><strong>Type:</strong> ${tx.transfer_type.toUpperCase()}</p>
+          <p><strong>From:</strong> ${tx.sender_details}</p>
+          <p><strong>To:</strong> ${tx.recipient_details}</p>
+          <p><strong>Amount:</strong> $${tx.amount.toFixed(2)}</p>
+          <p><strong>Status:</strong> ${tx.transaction_status}</p>
+          <p class="text-xs text-gray-500">${new Date(tx.created_at).toLocaleString()}</p>
+        `;
+        historyList.appendChild(txDiv);
+      });
+    }
+  </script>
+
+  <!-- Minor Form Style -->
+  <style>
+    .input-field {
+      margin-top: 0.5rem;
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+    .input-field:focus {
+      border-color: #4caf50;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.3);
+    }
+  </style>
+
 </body>
 </html>
